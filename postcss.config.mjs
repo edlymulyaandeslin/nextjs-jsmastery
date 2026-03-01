@@ -1,6 +1,11 @@
 const config = {
   plugins: {
-    "@tailwindcss/postcss": {},
+    "@tailwindcss/postcss": {
+      fontFamily: {
+        inter: ["var(--font-inter)"],
+        "space-grotesk": ["var(--font-space-grotesk)"],
+      },
+    },
   },
 };
 

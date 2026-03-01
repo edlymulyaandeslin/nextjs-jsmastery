@@ -1,7 +1,8 @@
 const Page = () => {
   return (
     <div>
-      <h1>Welcome to the Nextjs Crash Course</h1>
+      <p className="h1-bold">Welcome to the Nextjs Crash Course</p>
+      <p className="h1-bold font-space-grotesk">Welcome to the Nextjs Crash Course</p>
     </div>
   );
 };
