@@ -2,6 +2,7 @@
 
 import { SheetClose } from "@/components/ui/sheet";
 import { sidebarLinks } from "@/constants";
+import ROUTES from "@/constants/routes";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,7 +11,7 @@ import React from "react";
 
 const NavLinks = ({ isMobileNav = false }: { isMobileNav?: boolean }) => {
   const pathname = usePathname();
-  const userId = 1;
+  const userId = "1";
 
   return (
     <>
@@ -18,7 +19,7 @@ const NavLinks = ({ isMobileNav = false }: { isMobileNav?: boolean }) => {
         const isActive = (pathname.includes(item.route) && item.route.length > 1) || pathname === item.route;
 
         if (item.route === "/profile") {
-          if (userId) item.route = `${item.route}/${userId}`;
+          if (userId) item.route = ROUTES.PROFILE(userId);
           else return null;
         }
 
