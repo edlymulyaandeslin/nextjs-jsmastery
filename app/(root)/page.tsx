@@ -1,3 +1,4 @@
+import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
@@ -12,12 +13,20 @@ const questions = [
     tags: [
       { _id: "1", name: "react" },
       { _id: "2", name: "javascript" },
+      { _id: "3", name: "nextjs" },
+      { _id: "4", name: "php" },
+      { _id: "5", name: "laravel" },
     ],
-    author: { _id: "1", name: "John Doe" },
+    author: {
+      _id: "1",
+      name: "John Doe",
+      image:
+        "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_rp_50_assets&w=740&q=80",
+    },
     upvotes: 10,
     answer: 5,
     views: 100,
-    createdAt: new Date(),
+    createdAt: new Date("2026-02-04"),
   },
   {
     _id: "2",
@@ -27,11 +36,16 @@ const questions = [
       { _id: "1", name: "javascript" },
       { _id: "2", name: "javascript" },
     ],
-    author: { _id: "1", name: "John Doe" },
+    author: {
+      _id: "2",
+      name: "Mullet",
+      image:
+        "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_rp_50_assets&w=740&q=80",
+    },
     upvotes: 10,
     answer: 5,
     views: 100,
-    createdAt: new Date(),
+    createdAt: new Date("2023-10-10"),
   },
 ];
 
@@ -67,7 +81,7 @@ const Home = async ({ searchParams }: SearchParams) => {
 
       <div className="mt-10 flex w-full flex-col gap-6">
         {filteredQuestions.map((question) => (
-          <h1 key={question._id}>{question.title}</h1>
+          <QuestionCard key={question._id} question={question} />
         ))}
       </div>
     </>
