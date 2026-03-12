@@ -44,7 +44,7 @@ const LocalSearch = ({ route, imgSrc, placeholder, otherClasses }: Props) => {
     }, 300);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [searchQuery, router, route, searchParams, pathname]);
+  }, [searchQuery, route, pathname]);
 
   return (
     <div
