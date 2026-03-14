@@ -23,6 +23,7 @@ interface Question {
   views: number;
 }
 
+// Responses Global API Structure
 type ActionResponse<T = null> = {
   success: boolean;
   data?: T;
@@ -38,3 +39,4 @@ type ErrorResponse = ActionResponse<undefined> & { success: false };
 
 type APIErrorResponse = NextResponse<ErrorResponse>;
 type APIResponse<T = null> = NextResponse<SuccessResponse<T> | ErrorResponse>;
+//
