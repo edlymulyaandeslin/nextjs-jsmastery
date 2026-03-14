@@ -3,6 +3,8 @@ import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
+import { api } from "@/lib/api";
+import { handleError } from "@/lib/handlers/error";
 import Link from "next/link";
 
 const questions = [
@@ -49,11 +51,20 @@ const questions = [
   },
 ];
 
+const test = async () => {
+  try {
+    return await api.users.getAll();
+  } catch (error) {
+    return handleError(error);
+  }
+};
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
 
 const Home = async ({ searchParams }: SearchParams) => {
+  const users = await test();
+  console.log(users);
   const { query = "", filter = "" } = await searchParams;
 
   const filteredQuestions = questions.filter((question) => {
@@ -76,7 +87,6 @@ const Home = async ({ searchParams }: SearchParams) => {
       <section className="mt-11">
         <LocalSearch route="/" imgSrc="/icons/search.svg" placeholder="Search questions..." otherClasses="flex-1" />
       </section>
-
       <HomeFilter />
 
       <div className="mt-10 flex w-full flex-col gap-6">
