@@ -75,8 +75,8 @@ export const UserSchema = z.object({
 });
 
 export const AccountSchema = z.object({
-  userId: z.string(),
-  name: z.string().min(1, "Name is required"),
+  userId: z.string("User id is required"),
+  name: z.string("Name is required").min(1),
   image: z.string().url("Invalid image URL").optional(),
   password: z
     .string()
