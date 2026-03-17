@@ -2,14 +2,13 @@
 
 import { auth } from "@/auth";
 import { Session } from "next-auth";
-import { ZodError } from "zod";
-import { ZodSchema } from "zod/v3";
+import { ZodError, z } from "zod";
 import { UnauthorizedError, ValidationError } from "../http-errors";
 import dbConnect from "../mongoose";
 
 type ActionOptions<T> = {
   params?: T;
-  schema?: ZodSchema<T>;
+  schema?: z.Schema<T>;
   authorize?: boolean;
 };
 
