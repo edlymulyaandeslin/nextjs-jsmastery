@@ -1,6 +1,7 @@
 "use client";
 import ROUTES from "@/constants/routes";
 import { getTimestamp } from "@/lib/utils";
+import { Question, Tag } from "@/types/global";
 import Link from "next/link";
 import Metrix from "../Metrix";
 import TagCard from "./TagCard";
@@ -9,7 +10,7 @@ interface Props {
   question: Question;
 }
 
-const QuestionCard = ({ question: { _id, title, tags, author, upvotes, answer, views, createdAt } }: Props) => {
+const QuestionCard = ({ question: { _id, title, tags, author, upvotes, answers, views, createdAt } }: Props) => {
   return (
     <div className="card-wrapper rounded-[10] p-9 sm:px-11">
       <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
@@ -51,8 +52,8 @@ const QuestionCard = ({ question: { _id, title, tags, author, upvotes, answer, v
           />
           <Metrix
             imgUrl={"/icons/message.svg"}
-            alt={"answer"}
-            value={answer}
+            alt={"answers"}
+            value={answers}
             title={`Answers`}
             textStyles="small-medium text-dark400_light800"
           />
