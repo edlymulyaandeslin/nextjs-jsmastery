@@ -39,7 +39,6 @@ export const handleError = (error: unknown, responseType: ResponseType = "server
 
   if (error instanceof Error) {
     logger.error(error.message);
-
     return formatResponse(responseType, 500, error.message);
   }
 
