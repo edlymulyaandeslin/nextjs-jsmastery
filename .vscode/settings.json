@@ -30,10 +30,10 @@
     "**/.svn": true,
     "**/.hg": true,
     "**/.DS_Store": true,
-    "**/Thumbs.db": true
-    // "**/.vscode": true,
-    // "**/.next": true,
-    // "**/node_modules": true,
+    "**/Thumbs.db": true,
+    "**/.vscode": true,
+    "**/.next": true,
+    "**/node_modules": true
     // "next-env.d.ts": true
   },
   "chat.extensionUnification.enabled": true
