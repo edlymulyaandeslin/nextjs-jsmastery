@@ -4,7 +4,7 @@ import LocalSearch from "@/components/search/LocalSearch";
 import ROUTES from "@/constants/routes";
 import { EMPTY_TAGS } from "@/constants/state";
 import { getTags } from "@/lib/actions/tag.action";
-import { RouteParams, Tag } from "@/types/global";
+import { RouteParams } from "@/types/global";
 
 const Tags = async ({ searchParams }: RouteParams) => {
   const { page, pageSize, query, filter } = await searchParams;
@@ -17,6 +17,8 @@ const Tags = async ({ searchParams }: RouteParams) => {
   });
 
   const { tags } = data || {};
+
+  console.log(tags);
 
   return (
     <>
@@ -38,7 +40,7 @@ const Tags = async ({ searchParams }: RouteParams) => {
         errors={errors}
         render={(tags) => (
           <div className="mt-10 flex w-full flex-wrap gap-4">
-            {tags.map((tag: Tag) => (
+            {tags.map((tag) => (
               <TagCard key={tag._id} {...tag} />
             ))}
           </div>
