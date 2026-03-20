@@ -6,13 +6,10 @@ import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
 import { EMPTY_QUESTION } from "@/constants/state";
 import { getQuestions } from "@/lib/actions/question.action";
+import { RouteParams } from "@/types/global";
 import Link from "next/link";
 
-interface SearchParams {
-  searchParams: Promise<{ [key: string]: string }>;
-}
-
-const Home = async ({ searchParams }: SearchParams) => {
+const Home = async ({ searchParams }: RouteParams) => {
   const { page, pageSize, query, filter } = await searchParams;
 
   const { success, data, errors } = await getQuestions({
