@@ -66,3 +66,13 @@ export const getTimestamp = (createdAt: Date): string => {
   const suffix = years === 1 ? "" : "s";
   return `${years} year${suffix} ago`;
 };
+
+export const formatNumber = (number: number) => {
+  if (number >= 1000000) {
+    return (number / 1000000).toFixed(1) + "M";
+  } else if (number >= 1000) {
+    return (number / 1000).toFixed(1) + "K";
+  } else {
+    return number.toString();
+  }
+};
