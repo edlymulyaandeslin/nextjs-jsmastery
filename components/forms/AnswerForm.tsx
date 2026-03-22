@@ -6,12 +6,14 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { createAnswer } from "@/lib/actions/answer.action";
 import { AnswerSchema } from "@/lib/validation";
 import { MDXEditorMethods } from "@mdxeditor/editor";
 import { Loader } from "lucide-react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useRef, useState, useTransition } from "react";
+import { toast } from "sonner";
 import { Button } from "../ui/button";
 
 const Editor = dynamic(() => import("@/components/editor"), {
@@ -19,8 +21,8 @@ const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
 });
 
-const AnswerForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const AnswerForm = ({ questionId }: { questionId: string }) => {
+  const [isAnswering, startAnsweringTransition] = useTransition();
   const [isAISubmitting, setIsAISubmitting] = useState(false);
 
   const editorRef = useRef<MDXEditorMethods>(null);
@@ -33,7 +35,24 @@ const AnswerForm = () => {
   });
 
   const handleSubmit = async (values: z.infer<typeof AnswerSchema>) => {
-    console.log(values);
+    startAnsweringTransition(async () => {
+      const result = await createAnswer({
+        questionId,
+        content: values.content,
+      });
+
+      if (result.success) {
+        form.reset();
+
+        toast.success("Answer posted successfully", {
+          description: "Your answer has been posted successfully",
+        });
+      } else {
+        toast.error("Error", {
+          description: result.errors?.message,
+        });
+      }
+    });
   };
 
   return (
@@ -80,8 +99,8 @@ const AnswerForm = () => {
           />
 
           <div className="flex justify-end">
-            <Button type="submit" className="primary-gradient w-fit" disabled={isSubmitting}>
-              {isSubmitting ? (
+            <Button type="submit" className="primary-gradient w-fit" disabled={isAnswering}>
+              {isAnswering ? (
                 <>
                   <Loader className="mr-2 size-4 animate-spin" />
                   Posting...
