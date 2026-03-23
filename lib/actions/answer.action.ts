@@ -33,14 +33,16 @@ export async function createAnswer(params: CreateAnswerParams): Promise<ActionRe
 
     if (!question) throw new Error("Question not found");
 
-    const [newAnswer] = await ModelAnswer.create([
-      {
-        author: userId,
-        question: questionId,
-        content,
-      },
-      { session },
-    ]);
+    const [newAnswer] = await ModelAnswer.create(
+      [
+        {
+          author: userId,
+          question: questionId,
+          content,
+        },
+      ],
+      { session }
+    );
 
     if (!newAnswer) throw new Error("Failed to create answer");
 

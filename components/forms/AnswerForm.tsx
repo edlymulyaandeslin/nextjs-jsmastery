@@ -71,7 +71,7 @@ const AnswerForm = ({ questionId }: { questionId: string }) => {
           ) : (
             <>
               <Image
-                src={"/icons/starts.svg"}
+                src={"/icons/stars.svg"}
                 alt="Generate AI Answer"
                 width={12}
                 height={12}
@@ -89,8 +89,8 @@ const AnswerForm = ({ questionId }: { questionId: string }) => {
             control={form.control}
             name="content"
             render={({ field }) => (
-              <FormItem className="flex w-full flex-col gap-3">
-                <FormControl className="mt-3.5">
+              <FormItem className="flex w-full flex-col">
+                <FormControl>
                   <Editor value={field.value} editorRef={editorRef} fieldChange={field.onChange} />
                 </FormControl>
                 <FormMessage />
