@@ -7,9 +7,11 @@ import { z } from "zod";
 
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { createAnswer } from "@/lib/actions/answer.action";
+import { api } from "@/lib/api";
 import { AnswerSchema } from "@/lib/validation";
-import { MDXEditorMethods } from "@mdxeditor/editor";
+import { type MDXEditorMethods } from "@mdxeditor/editor";
 import { Loader } from "lucide-react";
+import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRef, useState, useTransition } from "react";
@@ -17,13 +19,19 @@ import { toast } from "sonner";
 import { Button } from "../ui/button";
 
 const Editor = dynamic(() => import("@/components/editor"), {
-  // Make sure we turn SSR off
   ssr: false,
 });
 
-const AnswerForm = ({ questionId }: { questionId: string }) => {
+interface Props {
+  questionId: string;
+  questionTitle: string;
+  questionContent: string;
+}
+
+const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
   const [isAnswering, startAnsweringTransition] = useTransition();
   const [isAISubmitting, setIsAISubmitting] = useState(false);
+  const session = useSession();
 
   const editorRef = useRef<MDXEditorMethods>(null);
 
@@ -47,12 +55,56 @@ const AnswerForm = ({ questionId }: { questionId: string }) => {
         toast.success("Answer posted successfully", {
           description: "Your answer has been posted successfully",
         });
+
+        if (editorRef.current) {
+          editorRef.current.setMarkdown("");
+        }
       } else {
         toast.error("Error", {
           description: result.errors?.message,
         });
       }
     });
+  };
+
+  const generateAIAnswer = async () => {
+    if (session.status !== "authenticated") {
+      return toast("Please log in", {
+        description: "You need to be logged in to use this feature",
+      });
+    }
+
+    setIsAISubmitting(true);
+
+    const userAnswer = editorRef.current?.getMarkdown();
+
+    try {
+      const { success, data, errors } = await api.ai.getAnswer(questionTitle, questionContent, userAnswer);
+
+      if (!success) {
+        return toast.error("Error", {
+          description: errors?.message,
+        });
+      }
+
+      const formattedAnswer = data.replace(/<br>/g, " ").toString().trim();
+
+      if (editorRef.current) {
+        editorRef.current.setMarkdown(formattedAnswer);
+        form.setValue("content", formattedAnswer);
+        form.trigger("content");
+      }
+
+      toast.success("Success", {
+        description: "AI Answer has been generated",
+      });
+    } catch (error) {
+      return toast.error("Error", {
+        description: error instanceof Error ? error.message : "There was a problem with your request",
+      });
+    } finally {
+      setIsAISubmitting(false);
+    }
   };
 
   return (
@@ -62,6 +114,7 @@ const AnswerForm = ({ questionId }: { questionId: string }) => {
         <Button
           className="btn light-border-2 text-primary-500 dark:text-primary-500 gap-1.5 rounded-md border px-4 py-2.5 shadow-none"
           disabled={isAISubmitting}
+          onClick={generateAIAnswer}
         >
           {isAISubmitting ? (
             <>

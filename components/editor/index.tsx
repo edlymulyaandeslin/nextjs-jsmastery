@@ -1,5 +1,6 @@
 "use client";
 // InitializedMDXEditor.tsx
+
 import {
   BoldItalicUnderlineToggles,
   ChangeCodeMirrorLanguage,
@@ -29,14 +30,14 @@ import {
 } from "@mdxeditor/editor";
 import { basicDark } from "cm6-theme-basic-dark";
 import { useTheme } from "next-themes";
-import type { ForwardedRef } from "react";
 
 import "@mdxeditor/editor/style.css";
+import type { ForwardedRef } from "react";
 
 interface Props {
   value: string;
-  fieldChange: (value: string) => void;
   editorRef: ForwardedRef<MDXEditorMethods> | null;
+  fieldChange: (value: string) => void;
 }
 
 const Editor = ({ value, editorRef, fieldChange, ...props }: Props) => {
@@ -47,8 +48,8 @@ const Editor = ({ value, editorRef, fieldChange, ...props }: Props) => {
   return (
     <MDXEditor
       key={resolvedTheme}
-      markdown={value}
       ref={editorRef}
+      markdown={value}
       onChange={fieldChange}
       className="background-light800_dark200 light-border-2 markdown-editor dark-editor grid w-full border"
       plugins={[
@@ -120,7 +121,7 @@ const Editor = ({ value, editorRef, fieldChange, ...props }: Props) => {
         }),
       ]}
       {...props}
-    />
+    ></MDXEditor>
   );
 };
 
