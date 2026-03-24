@@ -121,7 +121,7 @@ const Editor = ({ value, editorRef, fieldChange, ...props }: Props) => {
         }),
       ]}
       {...props}
-    ></MDXEditor>
+    />
   );
 };
 

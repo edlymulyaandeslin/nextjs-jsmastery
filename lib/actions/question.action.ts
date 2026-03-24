@@ -1,10 +1,11 @@
 "use server";
 
-import Question, { IQuestionDoc } from "@/database/question.model";
+import { Question as ModelQuestion } from "@/database";
+import { IQuestionDoc } from "@/database/question.model";
 import TagQuestion from "@/database/tag-question.model";
 import Tag, { ITagDoc } from "@/database/tag.model";
 import { CreateQuestionParams, EditQuestionParams, GetQuestionParams, IncrementViewsParams } from "@/types/action";
-import { ActionResponse, ErrorResponse, PaginatedSearchParams } from "@/types/global";
+import { ActionResponse, ErrorResponse, PaginatedSearchParams, Question } from "@/types/global";
 import mongoose, { QueryFilter, Types } from "mongoose";
 import action from "../handlers/action";
 import { handleError } from "../handlers/error";
@@ -34,7 +35,7 @@ export async function createQuestion(params: CreateQuestionParams): Promise<Acti
   session.startTransaction();
 
   try {
-    const [question] = await Question.create([{ title, content, author: userId }], { session });
+    const [question] = await ModelQuestion.create([{ title, content, author: userId }], { session });
 
     if (!question) {
       throw new Error("Failed to create question");
@@ -61,7 +62,7 @@ export async function createQuestion(params: CreateQuestionParams): Promise<Acti
 
     await TagQuestion.insertMany(tagQuestionDocuments, { session });
 
-    await Question.findOneAndUpdate(question._id, { $push: { tags: { $each: tagIds } } }, { session });
+    await ModelQuestion.findOneAndUpdate(question._id, { $push: { tags: { $each: tagIds } } }, { session });
 
     await session.commitTransaction();
 
@@ -92,7 +93,7 @@ export async function editQuestion(params: EditQuestionParams): Promise<ActionRe
   session.startTransaction();
 
   try {
-    const question = await Question.findById(questionId).populate("tags");
+    const question = await ModelQuestion.findById(questionId).populate("tags");
 
     if (!question) throw new Error("Question not found");
 
@@ -176,7 +177,9 @@ export async function getQuestion(params: GetQuestionParams): Promise<ActionResp
   const { questionId } = validationResult.params!;
 
   try {
-    const question = await Question.findById(questionId).populate("tags", "name").populate("author", "_id name image");
+    const question = await ModelQuestion.findById(questionId)
+      .populate("tags", "name")
+      .populate("author", "_id name image");
 
     if (!question) throw new Error("Question not found");
 
@@ -202,7 +205,7 @@ export async function getQuestions(
   const skip = (Number(page) - 1) * pageSize;
   const limit = pageSize;
 
-  const filterQuery: QueryFilter<typeof Question> = {};
+  const filterQuery: QueryFilter<typeof ModelQuestion> = {};
 
   if (filter === "recommended") {
     return { success: true, data: { questions: [], isNext: false } };
@@ -238,9 +241,9 @@ export async function getQuestions(
   }
 
   try {
-    const totalQuestions = await Question.countDocuments(filterQuery);
+    const totalQuestions = await ModelQuestion.countDocuments(filterQuery);
 
-    const questions = await Question.find(filterQuery)
+    const questions = await ModelQuestion.find(filterQuery)
       .populate("tags", "name")
       .populate("author", "name image")
       .lean()
@@ -269,7 +272,7 @@ export async function incrementViews(params: IncrementViewsParams): Promise<Acti
   const { questionId } = validationResult.params!;
 
   try {
-    const question = await Question.findById(questionId);
+    const question = await ModelQuestion.findById(questionId);
 
     if (!question) {
       throw new Error("Question not found");
