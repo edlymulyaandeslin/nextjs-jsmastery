@@ -75,6 +75,9 @@ export async function createVote(params: CreateVoteParams): Promise<ActionRespon
         await updateVotesCount({ targetId, targetType, voteType, change: -1 }, session);
       } else {
         await Vote.findOneAndUpdate(existingVote._id, { voteType }, { new: true, session });
+
+        await updateVotesCount({ targetId, targetType, voteType: existingVote.voteType, change: -1 }, session);
+
         await updateVotesCount({ targetId, targetType, voteType, change: 1 }, session);
       }
     } else {
