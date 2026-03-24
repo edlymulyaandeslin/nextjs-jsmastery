@@ -3,6 +3,7 @@
 import { signIn } from "@/auth";
 import Account from "@/database/account.model";
 import User from "@/database/user.model";
+import { AuthCredentials } from "@/types/action";
 import { ActionResponse, ErrorResponse } from "@/types/global";
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
