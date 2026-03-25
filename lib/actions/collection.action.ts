@@ -36,7 +36,7 @@ export async function toggleSaveQuestion(params: CollectionBaseParams): Promise<
       await CollectionModel.findByIdAndDelete(collection.id);
 
       return {
-        success: false,
+        success: true,
         data: {
           saved: false,
         },
