@@ -7,7 +7,7 @@ import { Badge } from "../ui/badge";
 interface Props {
   _id: string;
   name: string;
-  questions?: number;
+  question?: number;
   showCount?: boolean;
   compact?: boolean;
   remove?: boolean;
@@ -15,7 +15,7 @@ interface Props {
   handleRemove?: () => void;
 }
 
-const TagCard = ({ _id, name, questions, showCount, compact, remove, isButton, handleRemove }: Props) => {
+const TagCard = ({ _id, name, question, showCount, compact, remove, isButton, handleRemove }: Props) => {
   const iconClass = getDeviconClassname(name);
   const iconDescription = getTechDescription(name);
 
@@ -39,7 +39,7 @@ const TagCard = ({ _id, name, questions, showCount, compact, remove, isButton, h
         )}
       </Badge>
 
-      {showCount && <p className="small-medium text-dark500_light700">{questions}</p>}
+      {showCount && <p className="small-medium text-dark500_light700">{question}</p>}
     </>
   );
 
@@ -68,7 +68,7 @@ const TagCard = ({ _id, name, questions, showCount, compact, remove, isButton, h
         <p className="small-regular text-dark500_light700 mt-5 line-clamp-3 w-full">{iconDescription}</p>
 
         <p className="small-medium text-dark400_light500 mt-3.5">
-          <span className="body-semibold primary-text-gradient mr-2.5">{questions}+</span>
+          <span className="body-semibold primary-text-gradient mr-2.5">{question}+</span>
           Questions
         </p>
       </article>
