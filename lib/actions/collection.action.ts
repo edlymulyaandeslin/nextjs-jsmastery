@@ -1,9 +1,9 @@
 "use server";
 
 import ROUTES from "@/constants/routes";
-import { Collection, Collection as CollectionModel, Question as QuestionModel } from "@/database";
+import { Collection as CollectionModel, Question as QuestionModel } from "@/database";
 import { CollectionBaseParams } from "@/types/action";
-import { ActionResponse, ErrorResponse, PaginatedSearchParams } from "@/types/global";
+import { ActionResponse, Collection, ErrorResponse, PaginatedSearchParams } from "@/types/global";
 import { PipelineStage, Types } from "mongoose";
 import { revalidatePath } from "next/cache";
 import action from "../handlers/action";
@@ -168,12 +168,12 @@ export async function getSavedQuestions(
       });
     }
 
-    const [totalCount] = await Collection.aggregate([...pipeline, { $count: "count" }]);
+    const [totalCount] = await CollectionModel.aggregate([...pipeline, { $count: "count" }]);
 
     pipeline.push({ $sort: sortCriteria }, { $skip: skip }, { $limit: limit });
     pipeline.push({ $project: { question: 1, author: 1 } });
 
-    const questions = await Collection.aggregate(pipeline);
+    const questions = await CollectionModel.aggregate(pipeline);
 
     const isNext = totalCount.count > skip + questions.length;
 
