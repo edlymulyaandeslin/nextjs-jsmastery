@@ -10,7 +10,7 @@ import { PaginatedSearchParamsSchema } from "../validation";
 export async function getUsers(
   params: PaginatedSearchParams
 ): Promise<ActionResponse<{ users: User[]; isNext: boolean }>> {
-  const validationResult = action({
+  const validationResult = await action({
     params,
     schema: PaginatedSearchParamsSchema,
   });
