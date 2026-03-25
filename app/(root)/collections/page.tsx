@@ -1,6 +1,7 @@
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
 import LocalSearch from "@/components/search/LocalSearch";
+import ROUTES from "@/constants/routes";
 import { EMPTY_QUESTION } from "@/constants/state";
 import { getSavedQuestions } from "@/lib/actions/collection.action";
 import { RouteParams } from "@/types/global";
@@ -24,7 +25,12 @@ const Collections = async ({ searchParams }: RouteParams) => {
       </section>
 
       <section className="mt-11">
-        <LocalSearch route="/" imgSrc="/icons/search.svg" placeholder="Search collections..." otherClasses="flex-1" />
+        <LocalSearch
+          route={ROUTES.COLLECTION}
+          imgSrc="/icons/search.svg"
+          placeholder="Search collections..."
+          otherClasses="flex-1"
+        />
       </section>
 
       <DataRenderer
