@@ -31,7 +31,7 @@ export async function getUsers(
         name: { $regex: query, $options: "i" },
       },
       {
-        email: { $regex: query, $options: "i" },
+        username: { $regex: query, $options: "i" },
       },
     ];
   }
