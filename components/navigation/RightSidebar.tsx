@@ -1,11 +1,14 @@
 import ROUTES from "@/constants/routes";
 import { getHotQuestions } from "@/lib/actions/question.action";
+import { getTopTags } from "@/lib/actions/tag.action";
 import Image from "next/image";
 import Link from "next/link";
 import DataRenderer from "../DataRenderer";
+import TagCard from "../cards/TagCard";
 
 const RightSidebar = async () => {
   const { success, data: hotQuestions, errors } = await getHotQuestions();
+  const { success: tagSuccess, data: popularTags, errors: tagErrors } = await getTopTags();
 
   return (
     <section className="custom-scrollbar background-light900_dark200 light-border shadow-light-300 sticky top-0 right-0 flex h-screen w-[350] flex-col gap-6 overflow-y-auto border-l p-6 pt-36 max-xl:hidden dark:shadow-none">
@@ -47,11 +50,22 @@ const RightSidebar = async () => {
       <div className="mt-16">
         <h3 className="h3-bold text-dark200_light900">Popular Tags</h3>
 
-        {/* <div className="mt-7 flex flex-col gap-4">
-          {popularTags.map(({ _id, name, questions }) => (
-            <TagCard key={_id} _id={_id} name={name} questions={questions} showCount compact />
-          ))}
-        </div> */}
+        <DataRenderer
+          data={popularTags}
+          empty={{
+            title: "No tags found",
+            message: "No tag have been created yet",
+          }}
+          success={tagSuccess}
+          errors={tagErrors}
+          render={(popularTags) => (
+            <div className="mt-7 flex flex-col gap-4">
+              {popularTags.map(({ _id, name, question }) => (
+                <TagCard key={_id} _id={_id} name={name} question={question} showCount compact />
+              ))}
+            </div>
+          )}
+        />
       </div>
     </section>
   );
