@@ -8,6 +8,12 @@ import ROUTES from "@/constants/routes";
 import { EMPTY_QUESTION } from "@/constants/state";
 import { getSavedQuestions } from "@/lib/actions/collection.action";
 import { RouteParams } from "@/types/global";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Collections",
+  description: "This is all collections user",
+};
 
 const Collections = async ({ searchParams }: RouteParams) => {
   const { page, pageSize, query, filter } = await searchParams;

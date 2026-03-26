@@ -1,7 +1,13 @@
 import { auth } from "@/auth";
 import QuestionForm from "@/components/forms/QuestionForm";
 import ROUTES from "@/constants/routes";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Ask a question",
+  description: "Tell me what do you think!",
+};
 
 const AskQuestion = async () => {
   const session = await auth();

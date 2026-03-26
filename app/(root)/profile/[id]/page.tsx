@@ -13,8 +13,30 @@ import { EMPTY_ANSWERS, EMPTY_QUESTION, EMPTY_TAGS } from "@/constants/state";
 import { getUser, getUserAnswers, getUserQuestions, getUserStats, getUserTopTags } from "@/lib/actions/user.action";
 import { RouteParams } from "@/types/global";
 import dayjs from "dayjs";
+import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+
+export async function generateMetadata({ params }: RouteParams): Promise<Metadata> {
+  const { id } = await params;
+
+  const { success, data } = await getUser({
+    userId: id,
+  });
+  const { user } = data!;
+
+  if (!success || !user) return {};
+
+  return {
+    title: "Profile | " + user.username,
+    description: user.email,
+    twitter: {
+      card: "summary_large_image",
+      title: user.username,
+      description: user.email,
+    },
+  };
+}
 
 const Profile = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
@@ -80,7 +102,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
           />
 
           <div className="mt-3">
-            <h2 className="h2-bold text-dark200_light900">{name}</h2>
+            <h2 className="h2-bold text-dark200_light900 capitalize">{name}</h2>
             <p className="paragraph-regular text-dark200_light800">@{username}</p>
 
             <div className="mt-5 flex flex-wrap items-center justify-start gap-5">
@@ -110,7 +132,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
         totalQuestions={userStats?.totalQuestions || 0}
         totalAnswers={userStats?.totalAnswers || 0}
         badges={userStats?.badges || { GOLD: 0, SILVER: 0, BRONZE: 0 }}
-        reputationPoints={user.reputation || 0}
+        reputationPoints={reputation || 0}
       />
 
       <section className="mt-10 flex gap-10">
