@@ -10,6 +10,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { deleteAnswer } from "@/lib/actions/answer.action";
+import { deleteQuestion } from "@/lib/actions/question.action";
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -26,15 +28,17 @@ const EditDeleteAction = ({ type, itemId }: Props) => {
     router.push(`/questions/${itemId}/edit`);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (type === "Question") {
       // call api delete question
+      await deleteQuestion({ questionId: itemId });
 
       toast("Question deleted", {
         description: "Your question has been deleted",
       });
     } else if (type === "Answer") {
       // call api delete answer
+      await deleteAnswer({ answerId: itemId });
 
       toast("Answer deleted", {
         description: "Your answer has been deleted",

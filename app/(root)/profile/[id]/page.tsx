@@ -142,7 +142,6 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
                 </div>
               )}
             />
-
             <Pagination page={page} isNext={hasMoreQuestions} />
           </TabsContent>
 
@@ -167,7 +166,6 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
                 </div>
               )}
             />
-
             <Pagination page={page} isNext={hasMoreAnswers} />
           </TabsContent>
         </Tabs>
