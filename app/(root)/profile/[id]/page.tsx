@@ -10,7 +10,7 @@ import ProfileLink from "@/components/user/ProfileLink";
 import Stats from "@/components/user/Stats";
 import UserAvatar from "@/components/UserAvatar";
 import { EMPTY_ANSWERS, EMPTY_QUESTION, EMPTY_TAGS } from "@/constants/state";
-import { getUser, getUserAnswers, getUserQuestions, getUserTopTags } from "@/lib/actions/user.action";
+import { getUser, getUserAnswers, getUserQuestions, getUserStats, getUserTopTags } from "@/lib/actions/user.action";
 import { RouteParams } from "@/types/global";
 import dayjs from "dayjs";
 import Link from "next/link";
@@ -36,12 +36,13 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
     );
   }
 
-  const { user, totalQuestions, totalAnswers } = data!;
+  const { user } = data!;
 
   const [
     { success: userQuestionSuccess, data: userQuestions, errors: userQuestionsErrors },
     { success: userAnswersSuccess, data: userAnswers, errors: userAnswersErrors },
     { success: userTopTagsSuccess, data: userTopTags, errors: userTopTagsError },
+    { data: userStats },
   ] = await Promise.all([
     getUserQuestions({
       userId: id,
@@ -56,6 +57,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
     getUserTopTags({
       userId: id,
     }),
+    getUserStats({ userId: id }),
   ]);
 
   const { questions, isNext: hasMoreQuestions } = userQuestions!;
@@ -105,14 +107,10 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
       </section>
 
       <Stats
-        totalQuestions={totalQuestions}
-        totalAnswers={totalAnswers}
-        badges={{
-          GOLD: 0,
-          SILVER: 0,
-          BRONZE: 0,
-        }}
-        reputationPoints={reputation || 0}
+        totalQuestions={userStats?.totalQuestions || 0}
+        totalAnswers={userStats?.totalAnswers || 0}
+        badges={userStats?.badges || { GOLD: 0, SILVER: 0, BRONZE: 0 }}
+        reputationPoints={user.reputation || 0}
       />
 
       <section className="mt-10 flex gap-10">
