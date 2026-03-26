@@ -7,9 +7,11 @@ import { CreateAnswerParams, DeleteAnswerParams, GetAnswerParams } from "@/types
 import { ActionResponse, Answer, ErrorResponse } from "@/types/global";
 import mongoose from "mongoose";
 import { revalidatePath } from "next/cache";
+import { after } from "node:test";
 import action from "../handlers/action";
 import { handleError } from "../handlers/error";
 import { AnswerServerSchema, DeleteAnswerSchema, GetAnswersSchema } from "../validation";
+import { createInteraction } from "./interaction.action";
 
 export async function createAnswer(params: CreateAnswerParams): Promise<ActionResponse<IAnswerDoc>> {
   const validationResult = await action({
@@ -48,6 +50,16 @@ export async function createAnswer(params: CreateAnswerParams): Promise<ActionRe
 
     question.answers += 1;
     await question.save({ session });
+
+    after(
+      async () =>
+        await createInteraction({
+          action: "post",
+          actionId: newAnswer._id.toString(),
+          actionTarget: "answer",
+          authorId: userId as string,
+        })
+    );
 
     await session.commitTransaction();
 

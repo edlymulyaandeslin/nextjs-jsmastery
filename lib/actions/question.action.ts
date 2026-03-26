@@ -14,6 +14,7 @@ import {
 import { ActionResponse, ErrorResponse, PaginatedSearchParams, Question } from "@/types/global";
 import mongoose, { QueryFilter, Types } from "mongoose";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import action from "../handlers/action";
 import { handleError } from "../handlers/error";
 import dbConnect from "../mongoose";
@@ -25,6 +26,7 @@ import {
   IncrementViewsSchema,
   PaginatedSearchParamsSchema,
 } from "../validation";
+import { createInteraction } from "./interaction.action";
 
 export async function createQuestion(params: CreateQuestionParams): Promise<ActionResponse<Question>> {
   const validationResult = await action({
@@ -72,6 +74,16 @@ export async function createQuestion(params: CreateQuestionParams): Promise<Acti
     await TagQuestion.insertMany(tagQuestionDocuments, { session });
 
     await ModelQuestion.findOneAndUpdate(question._id, { $push: { tags: { $each: tagIds } } }, { session });
+
+    after(
+      async () =>
+        await createInteraction({
+          action: "post",
+          actionId: question._id.toString(),
+          actionTarget: "question",
+          authorId: userId as string,
+        })
+    );
 
     await session.commitTransaction();
 

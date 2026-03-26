@@ -63,7 +63,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
   const { answers, isNext: hasMoreAnswers } = userAnswers!;
   const { tags } = userTopTags!;
 
-  const { _id, name, username, image, portfolio, location, createdAt, bio } = user;
+  const { _id, name, username, image, portfolio, location, createdAt, bio, reputation } = user;
 
   return (
     <>
@@ -112,6 +112,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
           SILVER: 0,
           BRONZE: 0,
         }}
+        reputationPoints={reputation || 0}
       />
 
       <section className="mt-10 flex gap-10">
